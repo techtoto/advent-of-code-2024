@@ -3,11 +3,8 @@
 reports = []
 safe_reports = 0
 
-def whatamidoing(x):
-    return list(map(lambda x : int(x), x.split(" ")))
-
 with open("./day02/day02-input.txt") as f:
-    reports = list(map(whatamidoing, f.read().splitlines()))
+    reports = [[int(x) for x in line.split(" ")] for line in f.read().splitlines()]
 
 for report in reports:
     sorted_ascending = report.copy()
