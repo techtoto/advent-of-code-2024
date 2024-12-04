@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-xmas = "XMAS"
-xmas_index = 1
-
 xmas_count = 0
 x_mas_count = 0
 
@@ -12,93 +9,14 @@ with open("./day04/day04-input.txt") as f:
 def in_boundaries(x, y):
     return x in range(len(lines[y])) and y in range(len(lines))
 
-def search_upper_left(x, y):
-    global xmas_index, xmas_count
-    if in_boundaries(x - 1, y - 1):
-        if lines[y - 1][x - 1] == xmas[xmas_index]:
+def search(x, y, x_dir, y_dir, xmas_index=1):
+    global xmas_count
+    if in_boundaries(x + x_dir, y + y_dir):
+        if lines[y + y_dir][x + x_dir] == "XMAS"[xmas_index]:
             if xmas_index == 3:
-                xmas_index = 1
                 xmas_count += 1
             else:
-                xmas_index += 1
-                search_upper_left(x - 1, y - 1)
-
-def search_upper(x, y):
-    global xmas_index, xmas_count
-    if in_boundaries(x, y - 1):
-        if lines[y - 1][x] == xmas[xmas_index]:
-            if xmas_index == 3:
-                xmas_index = 1
-                xmas_count += 1
-            else:
-                xmas_index += 1
-                search_upper(x, y - 1)
-
-def search_upper_right(x, y):
-    global xmas_index, xmas_count
-    if in_boundaries(x + 1, y - 1):
-        if lines[y - 1][x + 1] == xmas[xmas_index]:
-            if xmas_index == 3:
-                xmas_index = 1
-                xmas_count += 1
-            else:
-                xmas_index += 1
-                search_upper_right(x + 1, y - 1)
-
-def search_right(x, y):
-    global xmas_index, xmas_count
-    if in_boundaries(x + 1, y):
-        if lines[y][x + 1] == xmas[xmas_index]:
-            if xmas_index == 3:
-                xmas_index = 1
-                xmas_count += 1
-            else:
-                xmas_index += 1
-                search_right(x + 1, y)
-
-def search_lower_right(x, y):
-    global xmas_index, xmas_count
-    if in_boundaries(x + 1, y + 1):
-        if lines[y + 1][x + 1] == xmas[xmas_index]:
-            if xmas_index == 3:
-                xmas_index = 1
-                xmas_count += 1
-            else:
-                xmas_index += 1
-                search_lower_right(x + 1, y + 1)
-
-def search_lower(x, y):
-    global xmas_index, xmas_count
-    if in_boundaries(x, y + 1):
-        if lines[y + 1][x] == xmas[xmas_index]:
-            if xmas_index == 3:
-                xmas_index = 1
-                xmas_count += 1
-            else:
-                xmas_index += 1
-                search_lower(x, y + 1)
-
-def search_lower_left(x, y):
-    global xmas_index, xmas_count
-    if in_boundaries(x - 1, y + 1):
-        if lines[y + 1][x - 1] == xmas[xmas_index]:
-            if xmas_index == 3:
-                xmas_index = 1
-                xmas_count += 1
-            else:
-                xmas_index += 1
-                search_lower_left(x - 1, y + 1)
-
-def search_left(x, y):
-    global xmas_index, xmas_count
-    if in_boundaries(x - 1, y):
-        if lines[y][x - 1] == xmas[xmas_index]:
-            if xmas_index == 3:
-                xmas_index = 1
-                xmas_count += 1
-            else:
-                xmas_index += 1
-                search_left(x - 1, y)
+                search(x + x_dir, y + y_dir, x_dir, y_dir, xmas_index + 1)
 
 def check_x_mas(x, y): # if statements straight outta hell
     global x_mas_count
@@ -108,33 +26,18 @@ def check_x_mas(x, y): # if statements straight outta hell
             ((lines[y + 1][x - 1] == "M" and lines[y - 1][x + 1] == "S") or (lines[y + 1][x - 1] == "S" and lines[y - 1][x + 1] == "M"))):
             x_mas_count += 1
 
-
 for y in range(len(lines)):
     for x in range(len(lines[y])):
         if lines[y][x] == "X":
-            xmas_index = 1
-            search_upper_left(x, y)
-
-            xmas_index = 1
-            search_upper(x, y)
+            search(x, y, -1, -1) # upper left
+            search(x, y, 0, -1) # upper
+            search(x, y, 1, -1) # upper right
+            search(x, y, 1, 0) # right
+            search(x, y, 1, 1) # lower right
+            search(x, y, 0, 1) # lower
+            search(x, y, -1, 1) # lower left
+            search(x, y, -1, 0) # left
             
-            xmas_index = 1
-            search_upper_right(x, y)
-            
-            xmas_index = 1
-            search_right(x, y)
-            
-            xmas_index = 1
-            search_lower_right(x, y)
-            
-            xmas_index = 1
-            search_lower(x, y)
-            
-            xmas_index = 1
-            search_lower_left(x, y)
-            
-            xmas_index = 1
-            search_left(x, y)
         elif lines[y][x] == "A":
             check_x_mas(x, y)
             
